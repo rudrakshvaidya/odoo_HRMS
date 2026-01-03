@@ -160,5 +160,3 @@ odoo-HRMS/
 
 **Author:** Yash Kulkarni
 ```
-
-Would you like me to add any additional sections like contributing guidelines or license information?
