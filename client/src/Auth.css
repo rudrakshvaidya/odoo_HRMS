@@ -1,0 +1,39 @@
+/* Reset & Basics */
+body { 
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+  background: #f0f2f5; 
+  margin: 0; 
+  padding: 0;
+  /* Removed: display: flex, justify-content, align-items, height: 100vh */
+}
+
+/* Navbar specific styles are handled in the component or below */
+
+/* This wrapper centers the form on the page */
+/* client/src/Auth.css */
+.auth-wrapper {
+  display: flex;
+  justify-content: center; /* Centers Horizontally */
+  align-items: center;     /* Centers Vertically */
+  min-height: 80vh;        /* Full height minus navbar */
+  width: 100%;             /* Ensures it spans the full screen width */
+}
+
+.card { 
+  background: white; 
+  padding: 2rem; 
+  border-radius: 8px; 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+  width: 100%; 
+  max-width: 400px; 
+}
+
+h2 { text-align: center; color: #333; margin-bottom: 1.5rem; margin-top: 0; }
+.form-group { margin-bottom: 1rem; }
+.form-group label { display: block; margin-bottom: 5px; color: #555; font-size: 0.9rem; }
+.form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+.btn { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem; margin-top: 10px; }
+.btn:hover { background: #0056b3; }
+.error { color: #d9534f; background: #f2dede; padding: 10px; border-radius: 4px; margin-bottom: 15px; text-align: center; font-size: 0.9rem; }
+.link-text { text-align: center; display: block; margin-top: 15px; color: #007bff; text-decoration: none; font-size: 0.9rem; }
+.link-text:hover { text-decoration: underline; }
