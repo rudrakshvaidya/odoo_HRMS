@@ -1,38 +1,38 @@
-import { useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import api from '../api';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import '../Auth.css';
 
 const ResetPassword = () => {
+  const [password, setPassword] = useState('');
   const [searchParams] = useSearchParams();
-  const token = searchParams.get('token'); // Get token from URL
-  
-  const [newPassword, setNewPassword] = useState('');
   const navigate = useNavigate();
+  const token = searchParams.get('token');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post('/reset-password', { token, newPassword });
-      alert('Password reset successfully!');
+      await api.post('/auth/reset-password', { token, newPassword: password });
+      alert('Password Reset Successfully!');
       navigate('/login');
     } catch (err) {
       alert('Error resetting password');
     }
   };
 
-  if (!token) return <p>Invalid or missing token.</p>;
-
   return (
-    <div>
-      <h2>Set New Password</h2>
-      <form onSubmit={handleSubmit}>
-        <input type="password" placeholder="New Password" required 
-          onChange={(e) => setNewPassword(e.target.value)} 
-        />
-        <button type="submit">Update Password</button>
-      </form>
+    <div className="auth-container">
+      <div className="card">
+        <h2>Reset Password</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>New Password</label>
+            <input type="password" onChange={(e) => setPassword(e.target.value)} required />
+          </div>
+          <button type="submit" className="btn">Reset Password</button>
+        </form>
+      </div>
     </div>
   );
 };
-
 export default ResetPassword;

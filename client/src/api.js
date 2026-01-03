@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5000/api/auth", // Matches your server routes
+  baseURL: 'http://localhost:5000/api', // Matches your server routes
 });
 
 // Automatically add token to every request if it exists

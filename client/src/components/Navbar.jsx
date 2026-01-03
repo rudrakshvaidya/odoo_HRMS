@@ -1,19 +1,33 @@
-// src/components/Navbar.jsx
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
-const Navbar = ({ isAuthenticated, onLogout }) => {
+const Navbar = () => {
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user'); // Optional: clear user data
+    navigate('/login');
+  }
+
   return (
-    <nav style={{ padding: '1rem', borderBottom: '1px solid #ccc', marginBottom: '1rem' }}>
-      <Link to="/dashboard" style={{ marginRight: '1rem' }}><strong>MyApp</strong></Link>
-      
-      {isAuthenticated ? (
-        <button onClick={onLogout}>Logout</button>
-      ) : (
-        <>
-          <Link to="/login" style={{ marginRight: '1rem' }}>Login</Link>
-          <Link to="/signup">Signup</Link>
-        </>
-      )}
+    <nav className="navbar">
+      <span>HRMS Manager</span>
+      <div>
+        <Link to="/">Home</Link>
+        {token ? (
+          <>
+            <Link to="/dashboard">Dashboard</Link>
+            <a href="#" onClick={handleLogout}>Logout</a>
+          </>
+        ) : (
+          <>
+            <Link to="/login">Login</Link>
+            <Link to="/signup">Signup</Link>
+          </>
+        )}
+      </div>
     </nav>
   );
 };

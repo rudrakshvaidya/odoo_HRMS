@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import api from '../api';
+import '../Auth.css';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -8,25 +9,27 @@ const ForgotPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await api.post('/forgot-password', { email });
-      setMessage(res.data.message);
+      await api.post('/auth/forgot-password', { email });
+      setMessage('Reset link sent to backend console (Simulation).');
     } catch (err) {
-      setMessage('Error sending email');
+      setMessage('Error sending email.');
     }
   };
 
   return (
-    <div>
-      <h2>Reset Password</h2>
-      <form onSubmit={handleSubmit}>
-        <input type="email" placeholder="Enter your email" required 
-          onChange={(e) => setEmail(e.target.value)} 
-        />
-        <button type="submit">Send Reset Link</button>
-      </form>
-      {message && <p>{message}</p>}
+    <div className="auth-container">
+      <div className="card">
+        <h2>Forgot Password</h2>
+        {message && <p style={{color: 'green', textAlign:'center'}}>{message}</p>}
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Enter your email</label>
+            <input type="email" onChange={(e) => setEmail(e.target.value)} required />
+          </div>
+          <button type="submit" className="btn">Send Link</button>
+        </form>
+      </div>
     </div>
   );
 };
-
 export default ForgotPassword;
