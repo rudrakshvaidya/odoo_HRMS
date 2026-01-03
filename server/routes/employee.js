@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const { Op } = require('sequelize'); // Sequelize operators
 const User = require('../models/User');
 const authMiddleware = require('../middleware/authMiddleware');
+const Salary = require('../models/Salary')
 
 const router = express.Router();
 
@@ -118,14 +119,44 @@ router.put('/status', authMiddleware, async (req, res) => {
 // GET SINGLE EMPLOYEE (By ID)
 router.get('/:id', authMiddleware, async (req, res) => {
   try {
-    const employee = await User.findByPk(req.params.id, {
-      attributes: { exclude: ['password'] } // Don't send the password!
+    const user = await User.findByPk(req.params.id, {
+      attributes: { exclude: ['password'] },
+      include: [{ model: Salary }] // Join Salary table
     });
-    if (!employee) return res.status(404).json({ message: 'Employee not found' });
-    res.json(employee);
+    
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    // Security Check: Hide salary if requester is NOT Admin AND NOT the user themselves
+    const requestingUser = req.user;
+    if (requestingUser.role !== 'Admin' && requestingUser.id !== user.id) {
+       user.Salary = null; // Hide salary data
+    }
+
+    res.json(user);
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }
+});
+
+// UPDATE PROFILE (Put request)
+router.put('/:id', authMiddleware, async (req, res) => {
+    try {
+        // Allow user to update their own profile, or Admin to update anyone
+        if (req.user.id != req.params.id && req.user.role !== 'Admin') {
+            return res.status(403).json({ message: 'Unauthorized' });
+        }
+        
+        const { aboutMe, skills, location, phone } = req.body;
+        
+        await User.update(
+            { aboutMe, skills, location, phoneNumber: phone },
+            { where: { id: req.params.id } }
+        );
+        
+        res.json({ message: 'Profile updated' });
+    } catch (err) {
+        res.status(500).json({ message: 'Error updating profile' });
+    }
 });
 
 module.exports = router;

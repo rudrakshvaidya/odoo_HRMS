@@ -53,7 +53,13 @@ const User = sequelize.define('User', {
   joiningDate: {
     type: DataTypes.DATEONLY,
     defaultValue: DataTypes.NOW
-  }
+  },
+  // Add these fields to your User.js model definition
+  department: { type: DataTypes.STRING, allowNull: true },
+  designation: { type: DataTypes.STRING, allowNull: true }, // e.g. "Manager"
+  location: { type: DataTypes.STRING, allowNull: true },
+  aboutMe: { type: DataTypes.TEXT, allowNull: true },
+  skills: { type: DataTypes.JSON, allowNull: true }, // Stores array like ["React", "Node"]
 }, {
   timestamps: true
 });
