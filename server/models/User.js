@@ -46,6 +46,10 @@ const User = sequelize.define('User', {
     type: DataTypes.ENUM('Admin', 'Employee', 'HR'),
     defaultValue: 'Employee'
   },
+  currentStatus: {
+    type: DataTypes.ENUM('Present', 'Absent', 'On Leave', 'Checked Out'),
+    defaultValue: 'Checked Out' // Default status
+  },
   joiningDate: {
     type: DataTypes.DATEONLY,
     defaultValue: DataTypes.NOW

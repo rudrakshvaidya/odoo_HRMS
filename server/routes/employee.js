@@ -86,5 +86,34 @@ router.post('/create', authMiddleware, async (req, res) => {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 });
+router.get('/', authMiddleware, async (req, res) => {
+  try {
+    // Fetch all users but hide sensitive data like passwords
+    const employees = await User.findAll({
+      attributes: ['id', 'firstName', 'lastName', 'role', 'companyName', 'currentStatus', 'email']
+    });
+    res.json(employees);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// TOGGLE ATTENDANCE STATUS (Check In / Check Out)
+router.put('/status', authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    // Toggle logic: If Checked Out -> Present. If Present -> Checked Out.
+    const newStatus = user.currentStatus === 'Present' ? 'Checked Out' : 'Present';
+    
+    user.currentStatus = newStatus;
+    await user.save();
+
+    res.json({ status: newStatus });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 module.exports = router;
