@@ -5,6 +5,8 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import CreateEmployee from './pages/CreateEmployee';
+import EmployeeProfile from './pages/EmployeeProfile';
+import MyProfile from './pages/MyProfile';
 
 function App() {
   // Lift user state up so Navbar can access it
@@ -26,6 +28,8 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/create-employee" element={<CreateEmployee />} />
+          <Route path="/employee/:id" element={<EmployeeProfile />} />
+          <Route path="/my-profile" element={<MyProfile />} />
         </Routes>
       </div>
     </Router>

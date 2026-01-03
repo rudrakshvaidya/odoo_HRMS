@@ -62,10 +62,14 @@ const Navbar = ({ user, refreshUser }) => {
           </div>
           
           {showDropdown && (
-            <div style={styles.dropdown}>
-              <div style={styles.dropdownItem}>My Profile</div>
-              <div style={styles.dropdownItem} onClick={handleLogout}>Log Out</div>
-            </div>
+            // Inside the dropdown div:
+<div style={styles.dropdown}>
+  {/* NEW: Link to My Profile */}
+  <Link to="/my-profile" style={{ textDecoration: 'none' }}>
+      <div style={styles.dropdownItem}>My Profile</div>
+  </Link>
+  <div style={styles.dropdownItem} onClick={handleLogout}>Log Out</div>
+</div>
           )}
         </div>
       </div>

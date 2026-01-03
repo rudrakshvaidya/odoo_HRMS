@@ -115,5 +115,17 @@ router.put('/status', authMiddleware, async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+// GET SINGLE EMPLOYEE (By ID)
+router.get('/:id', authMiddleware, async (req, res) => {
+  try {
+    const employee = await User.findByPk(req.params.id, {
+      attributes: { exclude: ['password'] } // Don't send the password!
+    });
+    if (!employee) return res.status(404).json({ message: 'Employee not found' });
+    res.json(employee);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 module.exports = router;

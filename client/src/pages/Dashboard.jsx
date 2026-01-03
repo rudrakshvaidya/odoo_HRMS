@@ -52,7 +52,8 @@ const Dashboard = () => {
       {/* Employee Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '20px' }}>
         {filteredEmployees.map(emp => (
-          <div key={emp.id} className="employee-card" style={styles.card}>
+          <div key={emp.id} className="employee-card" style={styles.card}
+            onClick={() => navigate(`/employee/${emp.id}`)}>
             {/* Status Icon (Top Right) */}
             <div style={styles.statusIcon} title={emp.currentStatus}>
               {emp.currentStatus === 'Present' ? '🟢' : 
