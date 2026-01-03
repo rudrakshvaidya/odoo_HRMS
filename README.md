@@ -60,7 +60,10 @@ cd odoo-HRMS
 ```
 
 ### 3. Database Configuration (Crucial)
-This project relies on a specific table structure. Open MySQL Workbench. Create a new schema/database named `dayflow_hrms`. Run this exact SQL query:
+This project relies on a comprehensive schema to support HR operations and profile management.
+1.  Open **MySQL Workbench**.
+2.  Create a new schema/database named `dayflow_hrms`.
+3.  Run this **exact SQL query** to set up the table matches the screenshots:
 
 ```sql
 USE dayflow_hrms;
@@ -69,16 +72,45 @@ DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    fullname VARCHAR(100) NOT NULL,
-    employee_id VARCHAR(50) UNIQUE NOT NULL,
+    
+    -- Core Identity
+    firstName VARCHAR(100) NOT NULL,
+    lastName VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    phone VARCHAR(20),
     password VARCHAR(255) NOT NULL,
+    phoneNumber VARCHAR(20),
+    
+    -- Enterprise Fields
+    companyName VARCHAR(100) DEFAULT 'Odoo India',
+    employeeId VARCHAR(50) UNIQUE, -- Can be NULL for initial super-admins
     role ENUM('Employee', 'Admin', 'HR') DEFAULT 'Employee',
-    company_name VARCHAR(100) DEFAULT 'Odoo India',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    joiningDate DATE,
+    currentStatus VARCHAR(50) DEFAULT 'Checked Out',
+    
+    -- Extended Profile Fields (Nullable)
+    department VARCHAR(100),
+    designation VARCHAR(100),
+    location VARCHAR(100),
+    aboutMe TEXT,
+    skills TEXT,
+    dob DATE,
+    address TEXT,
+    nationality VARCHAR(50),
+    personalEmail VARCHAR(100),
+    gender VARCHAR(20),
+    maritalStatus VARCHAR(20),
+    
+    -- Banking & Compliance (Nullable)
+    bankAccountNumber VARCHAR(50),
+    bankName VARCHAR(100),
+    ifscCode VARCHAR(20),
+    panNumber VARCHAR(20),
+    uanNumber VARCHAR(20),
+
+    -- System Timestamps
+    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
-```
 
 ### 4. Backend Setup
 ```bash
