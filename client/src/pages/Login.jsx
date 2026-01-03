@@ -46,7 +46,7 @@ const Login = ({ refreshUser }) => { // Ensure refreshUser is receiving props
           </div>
           <button type="submit" className="btn">Login</button>
         </form>
-        <Link to="/signup" className="link-text">New Employee? Register Here</Link>
+        <p className="link-text">New Employee? Contact Your Company's HR</p>
       </div>
     </div>
   );

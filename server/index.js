@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
+const Attendance = require('./models/Attendance');
+const TimeOff = require('./models/TimeOff');
 
 // 1. Import DB Connection
 const { sequelize, connectDB } = require('./config/db');
@@ -13,9 +15,15 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+User.hasMany(TimeOff, { foreignKey: 'userId' });
+TimeOff.belongsTo(User, { foreignKey: 'userId' });
+
 // 3. DEFINE ASSOCIATIONS HERE (This fixes the circular error)
 User.hasOne(Salary, { foreignKey: 'userId', onDelete: 'CASCADE' });
 Salary.belongsTo(User, { foreignKey: 'userId' });
+
+User.hasMany(Attendance, { foreignKey: 'userId' });
+Attendance.belongsTo(User, { foreignKey: 'userId' });
 
 // 4. Connect & Sync
 connectDB();

@@ -6,7 +6,9 @@ const Dashboard = () => {
   const [employees, setEmployees] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
-  const currentUser = JSON.parse(localStorage.getItem('user'));
+  
+  // Safe check to avoid crash if localstorage is empty
+  const currentUser = JSON.parse(localStorage.getItem('user')) || {};
 
   // Fetch employees on load
   useEffect(() => {
@@ -15,29 +17,37 @@ const Dashboard = () => {
         const res = await api.get('/employees');
         setEmployees(res.data);
       } catch (err) {
-        console.error("Failed to load employees");
+        console.error("Failed to load employees", err);
       }
     };
     fetchEmployees();
   }, []);
 
-  // Filter employees based on search
-  const filteredEmployees = employees.filter(emp => 
-    (emp.firstName + ' ' + emp.lastName).toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Filter logic: Matches Search Term AND Role is 'Employee'
+  const filteredEmployees = employees.filter(emp => {
+    const fullName = (emp.firstName + ' ' + emp.lastName).toLowerCase();
+    const matchesSearch = fullName.includes(searchTerm.toLowerCase());
+    const isEmployee = emp.role === 'Employee'; // <--- Only show Employees
+    
+    return matchesSearch && isEmployee;
+  });
 
   return (
     <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
       
       {/* Top Bar: New Button & Search */}
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-        {(currentUser.role === 'Admin' || currentUser.role === 'HR') && (
+        
+        {/* Only Admin or HR can see the 'NEW' button */}
+        {(currentUser.role === 'Admin' || currentUser.role === 'HR') ? (
           <button 
             onClick={() => navigate('/create-employee')}
             style={{ background: '#7e57c2', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer' }}
           >
             NEW
           </button>
+        ) : (
+          <div></div> /* Empty div to keep search bar on the right if button is hidden */
         )}
         
         <input 
@@ -51,26 +61,34 @@ const Dashboard = () => {
 
       {/* Employee Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '20px' }}>
-        {filteredEmployees.map(emp => (
-          <div key={emp.id} className="employee-card" style={styles.card}
-            onClick={() => navigate(`/employee/${emp.id}`)}>
-            {/* Status Icon (Top Right) */}
-            <div style={styles.statusIcon} title={emp.currentStatus}>
-              {emp.currentStatus === 'Present' ? '🟢' : 
-               emp.currentStatus === 'On Leave' ? '✈️' : '🟡'}
-            </div>
-
-            {/* Avatar & Info */}
-            <div style={styles.cardContent}>
-              <div style={styles.largeAvatar}>
-                {emp.firstName.charAt(0)}{emp.lastName.charAt(0)}
+        {filteredEmployees.length > 0 ? (
+          filteredEmployees.map(emp => (
+            <div 
+              key={emp.id} 
+              className="employee-card" 
+              style={styles.card}
+              onClick={() => navigate(`/employee/${emp.id}`)}
+            >
+              {/* Status Icon (Top Right) */}
+              <div style={styles.statusIcon} title={emp.currentStatus}>
+                {emp.currentStatus === 'Present' ? '🟢' : 
+                 emp.currentStatus === 'On Leave' ? '✈️' : '🟡'}
               </div>
-              <h3 style={{ margin: '10px 0 5px 0' }}>{emp.firstName} {emp.lastName}</h3>
-              <p style={{ color: '#666', margin: 0 }}>{emp.role}</p>
-              <p style={{ color: '#888', fontSize: '0.8rem' }}>{emp.email}</p>
+
+              {/* Avatar & Info */}
+              <div style={styles.cardContent}>
+                <div style={styles.largeAvatar}>
+                  {emp.firstName?.charAt(0)}{emp.lastName?.charAt(0)}
+                </div>
+                <h3 style={{ margin: '10px 0 5px 0' }}>{emp.firstName} {emp.lastName}</h3>
+                <p style={{ color: '#666', margin: 0 }}>{emp.role}</p>
+                <p style={{ color: '#888', fontSize: '0.8rem' }}>{emp.email}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <p style={{ color: '#666', colSpan: 3 }}>No employees found.</p>
+        )}
       </div>
     </div>
   );

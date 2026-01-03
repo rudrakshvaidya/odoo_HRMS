@@ -7,6 +7,8 @@ import Dashboard from './pages/Dashboard';
 import CreateEmployee from './pages/CreateEmployee';
 import EmployeeProfile from './pages/EmployeeProfile';
 import MyProfile from './pages/MyProfile';
+import AttendancePage from './pages/Attendance';
+import TimeOff from './pages/TimeOff';
 
 function App() {
   // Lift user state up so Navbar can access it
@@ -30,6 +32,8 @@ function App() {
           <Route path="/create-employee" element={<CreateEmployee />} />
           <Route path="/employee/:id" element={<EmployeeProfile />} />
           <Route path="/my-profile" element={<MyProfile />} />
+          <Route path="/attendance" element={<AttendancePage />} />
+          <Route path="/timeoff" element={<TimeOff />} />
         </Routes>
       </div>
     </Router>

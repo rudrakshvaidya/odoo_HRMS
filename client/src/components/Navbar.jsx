@@ -102,5 +102,19 @@ const styles = {
   },
   dropdownItem: { padding: '10px', cursor: 'pointer', borderBottom: '1px solid #eee', color: '#333' }
 };
+const toggleCheckIn = async () => {
+    try {
+      // CHANGE THIS URL to the new route
+      const res = await api.post('/attendance/toggle'); 
+      
+      // Update local state
+      const updatedUser = { ...user, currentStatus: res.data.status };
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      if (refreshUser) refreshUser(updatedUser);
+      alert(res.data.message);
+    } catch (err) {
+      alert(err.response?.data?.message || 'Error updating status');
+    }
+  };
 
 export default Navbar;

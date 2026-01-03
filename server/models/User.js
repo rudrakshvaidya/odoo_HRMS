@@ -54,6 +54,22 @@ const User = sequelize.define('User', {
     type: DataTypes.DATEONLY,
     defaultValue: DataTypes.NOW
   },
+  // ... existing fields ...
+  
+  // === NEW PRIVATE INFO FIELDS ===
+  dob: { type: DataTypes.DATEONLY, allowNull: true },
+  address: { type: DataTypes.TEXT, allowNull: true },
+  nationality: { type: DataTypes.STRING, allowNull: true },
+  personalEmail: { type: DataTypes.STRING, allowNull: true },
+  gender: { type: DataTypes.ENUM('Male', 'Female', 'Other'), allowNull: true },
+  maritalStatus: { type: DataTypes.STRING, allowNull: true },
+  
+  // === BANK DETAILS ===
+  bankAccountNumber: { type: DataTypes.STRING, allowNull: true },
+  bankName: { type: DataTypes.STRING, allowNull: true },
+  ifscCode: { type: DataTypes.STRING, allowNull: true },
+  panNumber: { type: DataTypes.STRING, allowNull: true },
+  uanNumber: { type: DataTypes.STRING, allowNull: true },
   // Add these fields to your User.js model definition
   department: { type: DataTypes.STRING, allowNull: true },
   designation: { type: DataTypes.STRING, allowNull: true }, // e.g. "Manager"
